@@ -32,7 +32,8 @@ int main() {
     BongoAudio::bindToLua();
     BongoHelper::bindToLua();
 
-    BongoLua::executeScript("src/test.lua");
+    // BongoLua::executeScript("src/test_hard_worker_version.lua");
+    BongoLua::executeScript("src/gpt_hard_version.lua");
     BongoLua::closeLua();
 
     return 0;

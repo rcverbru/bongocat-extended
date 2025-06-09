@@ -28,26 +28,42 @@ void BongoWindow::create(UIntRef width, UIntRef height) {
 }
 
 // NOTE: All BongoWindow create functions rely on this function
-void BongoWindow::create(UIntRef width, UIntRef height, UInt32Ref style) {
+void BongoWindow::create(UIntRef width, UIntRef height, UInt32Ref style,
+                         Vec2iRef position) {
     if (style == sf::Style::None)
         borderless = true;
 
-    // allows the window to be streched
-    main_window.create(sf::VideoMode(max_sprite_width, max_sprite_height), "BongoCat+", style);
-    main_window.setSize(sf::Vector2u(width, height));
+    // Get desktop screen size
+    sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
+    int screen_width = desktop.width;
+    int screen_height = desktop.height;
 
-    // check if the window being created is bigger then the screen
+    // Use requested window size
+    int window_width = static_cast<int>(width);
+    int window_height = static_cast<int>(height);
+
+    // Position window in lower-right corner
+    sf::Vector2i lower_right_position(
+        screen_width - window_width,
+        screen_height - window_height
+    );
+
+    main_window.create(sf::VideoMode(window_width, window_height), "BongoCat+", style);
+    main_window.setSize(sf::Vector2u(window_width, window_height));
+    main_window.setPosition(lower_right_position);
+
     if (BongoWindow::getX() < width || BongoWindow::getY() < height)
         std::cerr << "BongoCat+ [WARN]: Cannot spawn window of size (" << width
                   << ", " << height << "), window has been sized down to ("
                   << BongoWindow::getX() << ", " << BongoWindow::getY()
                   << ")";
+
     main_window.setFramerateLimit(MAX_FRAMERATE);
 }
 
 void BongoWindow::create(UIntRef width, UIntRef height, UInt32Ref style,
                          Vec2iRef position) {
-    BongoWindow::create(width, height, style);
+    (width, height, style);
     BongoWindow::setPosition(position);
 }
 
